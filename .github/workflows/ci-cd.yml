@@ -18,10 +18,12 @@ jobs:
 
     - name: Lint Kubernetes Manifests
       run: |
-        # Use yq (pre-installed) to validate YAML syntax offline
         yq eval '.' k8s/deployment.yaml > /dev/null
         yq eval '.' k8s/service.yaml > /dev/null
         echo "Kubernetes manifests are valid YAML."
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
 
     - name: Terraform Format Check
       run: |

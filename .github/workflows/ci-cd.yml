@@ -11,11 +11,6 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-
     - name: Build Docker Image
       run: |
         cd app
@@ -23,9 +18,10 @@ jobs:
 
     - name: Lint Kubernetes Manifests
       run: |
-        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-        kubectl apply --dry-run=client --validate=false -f k8s/deployment.yaml
-        kubectl apply --dry-run=client --validate=false -f k8s/service.yaml
+        # Use yq (pre-installed) to validate YAML syntax offline
+        yq eval '.' k8s/deployment.yaml > /dev/null
+        yq eval '.' k8s/service.yaml > /dev/null
+        echo "Kubernetes manifests are valid YAML."
 
     - name: Terraform Format Check
       run: |

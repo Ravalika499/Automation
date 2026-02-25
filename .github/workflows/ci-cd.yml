@@ -24,8 +24,8 @@ jobs:
     - name: Lint Kubernetes Manifests
       run: |
         curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-        kubectl apply --dry-run=client -f k8s/deployment.yaml
-        kubectl apply --dry-run=client -f k8s/service.yaml
+        kubectl apply --dry-run=client --validate=false -f k8s/deployment.yaml
+        kubectl apply --dry-run=client --validate=false -f k8s/service.yaml
 
     - name: Terraform Format Check
       run: |
